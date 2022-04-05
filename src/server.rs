@@ -48,46 +48,7 @@ pub fn start(config: Config) {
     });
 }
 
-static FOUR_O_FOUR: &str = r#"
-<html>
-    <head>
-        <title>flashpaper-rs</title>
-    </head>
-    <body style="margin: 1%">
-        404
-    </body>
-</html>
-"#;
-
+static FOUR_O_FOUR: &str = include_str!("../static/404.html");
 static FORM: &str = include_str!("../static/index.html");
-
-static SBMT: &str = r#"
-<html>
-    <head>
-        <title>flashpaper-rs</title>
-    </head>
-    <body style="margin: 1%">
-        <h1>flashpaper-rs</h1>
-        <div style="text-align: center;">
-            <p>Success!</p>
-            <p>Your url is http://localhost:8321/?k={{__K__}}</p>
-            <a href="/">Home</a>
-        </div>
-    </body>
-    </html>
-"#;
-
-static MSG: &str = r#"
-<html>
-    <head>
-        <title>flashpaper-rs</title>
-    </head>
-    <body>
-        <h1>flashpaper-rs</h1>
-        <div style="text-align: center;">
-            <p>{{__MESSAGE__}}</p>
-            <a href="/">Home</a>
-        </div>
-    </body>
-</html>
-"#;
+static SBMT: &str = include_str!("../static/submit.html");
+static MSG: &str = include_str!("../static/message.html");
