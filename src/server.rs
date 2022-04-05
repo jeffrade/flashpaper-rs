@@ -1,6 +1,8 @@
 #![allow(clippy::manual_strip)]
 use std::io::stdout;
 
+use rouille::Response;
+
 use crate::config::Config;
 use crate::store;
 
@@ -28,34 +30,36 @@ pub fn start(config: Config) {
                     let data = try_or_400!(post_input!(request, {
                         txt: String,
                     }));
-                    println!("Received data: {:?}", data); // FIXME Remove before production use.
 
                     let k = store::save(data.txt.as_bytes().to_vec(), &static_key);
                     let resp = SBMT.replace("{{__K__}}", &k);
                     rouille::Response::html(resp)
                 },
-                _ => rouille::Response::empty_404()
+                _ => {
+                    let response = rouille::match_assets(&request, "./static");
+                    if response.is_success() {
+                        response
+                    } else {
+                        Response::html(FOUR_O_FOUR)
+                    }
+                }
             )
         })
     });
 }
 
-static FORM: &str = r#"
+static FOUR_O_FOUR: &str = r#"
 <html>
     <head>
         <title>flashpaper-rs</title>
     </head>
     <body style="margin: 1%">
-        <h1>flashpaper-rs</h1>
-        <div style="text-align: center;">
-            <form action="submit" method="POST">
-                <p><input style="width: 50%; height: 15%;" type="text" name="txt" placeholder="Something secret..." /></p>
-                <p><button style="width: 50%; height: 15%;">Submit</button></p>
-            </form>
-        </div>
+        404
     </body>
 </html>
 "#;
+
+static FORM: &str = include_str!("../static/index.html");
 
 static SBMT: &str = r#"
 <html>
