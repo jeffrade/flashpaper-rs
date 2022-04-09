@@ -8,8 +8,8 @@ edition = "2018"
 
 [dependencies]
 aes-gcm = "^0.9"
+argon2 = "^0.4" # Argon2i uses data-independent memory access, which is preferred for password hashing and password-based key derivation
 base64 = "^0.13"
-bcrypt = "^0.12"
 block-modes = "^0.9"
 hex = "^0.4"
 rand = { version = "^0.8", features = ["std_rng"] }

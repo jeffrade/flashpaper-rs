@@ -21,4 +21,4 @@ cargo run
 ### TODO
  - Database should be encrypted at rest
  - Improve RNG implementation
- - Is bcrypt ideal?
+ - Use Argon2i instead of default Argon2

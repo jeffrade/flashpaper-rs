@@ -1,14 +1,23 @@
+use argon2::password_hash::rand_core::OsRng;
+use argon2::password_hash::PasswordHash;
+use argon2::password_hash::PasswordHasher;
+use argon2::password_hash::PasswordVerifier;
+use argon2::password_hash::SaltString;
+use argon2::Argon2;
+
 use crate::crypto;
 use crate::db;
 use crate::util;
 
-pub fn save(message: Vec<u8>, static_key: &[u8]) -> String {
+pub fn save(message: Vec<u8>, static_key: &[u8]) -> Result<String, argon2::password_hash::Error> {
     let id = crypto::create_rand_bytes(8, true);
     let iv = crypto::create_rand_iv();
     let aes_key = crypto::create_rand_bytes(32, true);
 
     let k: Vec<u8> = util::append_arrays(&id, &aes_key);
-    let hash: String = bcrypt::hash(&k, bcrypt::DEFAULT_COST).expect("Could not hash k!");
+    let argon2 = Argon2::default();
+    let salt = SaltString::generate(&mut OsRng);
+    let hash = argon2.hash_password(&k, &salt)?.to_string();
 
     let message_ciphertext =
         crypto::encrypt(&aes_key, &iv, &message).expect("Could not encrypt message!");
@@ -21,7 +30,7 @@ pub fn save(message: Vec<u8>, static_key: &[u8]) -> String {
         &util::hex_encode(&encrypted_secret),
     );
 
-    util::hex_urlify(&util::hex_encode(&k))
+    Ok(util::hex_urlify(&util::hex_encode(&k)))
 }
 
 pub fn retrieve(k_str: &str, static_key: &[u8]) -> Option<String> {
@@ -53,8 +62,9 @@ pub fn retrieve(k_str: &str, static_key: &[u8]) -> Option<String> {
             let secret =
                 util::hex_decode(&record.secret).expect("hexadecimal secret could not be decoded!");
 
-            match bcrypt::verify(&k, hash) {
-                Ok(true) => {
+            let parsed_hash = PasswordHash::new(hash).ok()?;
+            match Argon2::default().verify_password(&k, &parsed_hash) {
+                Ok(()) => {
                     let message_ciphertext = crypto::decrypt(static_key, &iv, &secret)
                         .expect("Could not decrypt secret!");
                     let message_vec = crypto::decrypt(&aes_key, &iv, &message_ciphertext)
@@ -73,12 +83,8 @@ pub fn retrieve(k_str: &str, static_key: &[u8]) -> Option<String> {
                         }
                     }
                 }
-                Ok(false) => {
-                    println!("bcrypt hash is not equal!");
-                    None
-                }
                 Err(err) => {
-                    println!("Error trying to verify hash! {:?}", err);
+                    println!("Error trying to verify hash: {:?}", err);
                     None
                 }
             }

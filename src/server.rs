@@ -31,9 +31,15 @@ pub fn start(config: Config) {
                         txt: String,
                     }));
 
-                    let k = store::save(data.txt.as_bytes().to_vec(), &static_key);
-                    let resp = SBMT.replace("{{__K__}}", &k);
-                    rouille::Response::html(resp)
+                    match store::save(data.txt.as_bytes().to_vec(), &static_key) {
+                        Ok(k) => {
+                            let resp = SBMT.replace("{{__K__}}", &k);
+                            rouille::Response::html(resp)
+                        },
+                        Err(_) => {
+                            rouille::Response::html(FIVE_HUNDRED)
+                        }
+                    }
                 },
                 _ => {
                     let response = rouille::match_assets(&request, "./static");
@@ -48,6 +54,7 @@ pub fn start(config: Config) {
     });
 }
 
+static FIVE_HUNDRED: &str = include_str!("../static/500.html");
 static FOUR_O_FOUR: &str = include_str!("../static/404.html");
 static FORM: &str = include_str!("../static/index.html");
 static SBMT: &str = include_str!("../static/submit.html");

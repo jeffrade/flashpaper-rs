@@ -12,6 +12,7 @@ pub fn create_rand_bytes(size: u8, disallow_null: bool) -> Vec<u8> {
     while index < size {
         let mut byte = rand::random::<u8>();
         // https://github.com/Keats/rust-bcrypt/issues/17
+        // TLDR; https://github.com/pyca/bcrypt/blob/742723a/src/bcrypt/__init__.py#L82
         if disallow_null {
             while byte == 0u8 {
                 byte = rand::random::<u8>();
