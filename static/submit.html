@@ -4,9 +4,9 @@
                 <div class="row justify-content-center">
                     <div class="col-xl">
                         <div class="text-center">
-                            <p>Encryption complete! The below url can only be viewed once.</p>
-                            <p>Your url is http://localhost:8321/?k={{__K__}}</p>
-                            <a href="/">Home</a>
+                            <p>Encryption complete! Your one-time url is:</p>
+                            <p><span id="one_time_url">http://localhost:8321/?k={{__K__}}</span></p>
+                            <div class="col-auto"><button class="btn btn-primary btn-lg" onclick="copyToClipboard()">Copy URL</button></div>
                         </div>
                     </div>
                 </div>
