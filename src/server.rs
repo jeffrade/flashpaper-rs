@@ -54,8 +54,28 @@ pub fn start(config: Config) {
     });
 }
 
-static FIVE_HUNDRED: &str = include_str!("../static/500.html");
-static FOUR_O_FOUR: &str = include_str!("../static/404.html");
-static FORM: &str = include_str!("../static/index.html");
-static SBMT: &str = include_str!("../static/submit.html");
-static MSG: &str = include_str!("../static/message.html");
+static FIVE_HUNDRED: &str = concat!(
+    include_str!("../static/includes/header.html"),
+    include_str!("../static/500.html"),
+    include_str!("../static/includes/footer.html")
+);
+static FOUR_O_FOUR: &str = concat!(
+    include_str!("../static/includes/header.html"),
+    include_str!("../static/404.html"),
+    include_str!("../static/includes/footer.html")
+);
+static FORM: &str = concat!(
+    include_str!("../static/includes/header.html"),
+    include_str!("../static/index.html"),
+    include_str!("../static/includes/footer.html")
+);
+static SBMT: &str = concat!(
+    include_str!("../static/includes/header.html"),
+    include_str!("../static/submit.html"),
+    include_str!("../static/includes/footer.html")
+);
+static MSG: &str = concat!(
+    include_str!("../static/includes/header.html"),
+    include_str!("../static/message.html"),
+    include_str!("../static/includes/footer.html")
+);
