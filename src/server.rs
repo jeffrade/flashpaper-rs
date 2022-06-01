@@ -7,8 +7,8 @@ use crate::config::Config;
 use crate::store;
 
 pub fn start(config: Config) {
-    println!("Now listening on localhost:8321");
     let static_key: Vec<u8> = config.static_key;
+    println!("Now listening on port 8321");
 
     // https://github.com/tomaka/rouille/blob/c86bbf422d1d6f7a4798c762018a4b7922bb94b5/examples/login-session.rs
     // https://github.com/tomaka/rouille/blob/c86bbf422d1d6f7a4798c762018a4b7922bb94b5/examples/simple-form.rs
