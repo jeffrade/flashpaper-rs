@@ -18,6 +18,17 @@ Then to start, simply:
 cargo run
 ```
 
+### Docker
+To build:
+```
+docker build -t flashpaper-rs .
+```
+To run:
+```
+export FLASHPAPER_STATIC_KEY=$(openssl rand -hex 32)
+docker run -it -p 8321:8321 --env FLASHPAPER_STATIC_KEY flashpaper-rs
+```
+
 ### TODO
  - Database should be encrypted at rest
  - Improve RNG implementation
