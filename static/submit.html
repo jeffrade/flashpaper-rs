@@ -5,10 +5,16 @@
                     <div class="col-xl">
                         <div class="text-center">
                             <p>Encryption complete! Your one-time url is:</p>
-                            <p><span id="one_time_url">http://localhost:8321/?k={{__K__}}</span></p>
-                            <div class="col-auto"><button class="btn btn-primary btn-lg" onclick="copyToClipboard()">Copy URL</button></div>
+                            <p><span id="one_time_url" style="font-weight: bold;">Loading...</span></p>
+                            <div class="col-auto"><button id="copy_button" class="btn btn-primary btn-lg" onclick="copyToClipboard()" style="visibility: hidden;">Copy URL</button></div>
                         </div>
                     </div>
                 </div>
             </div>
         </header>
+<script>
+  window.onload = (function () {
+    document.getElementById("one_time_url").innerHTML = window.location.origin + "?k={{__K__}}";
+    document.getElementById("copy_button").style.visibility = "visible"; 
+  });
+</script>
