@@ -1,3 +1,4 @@
+#![allow(clippy::single_char_pattern)]
 use hex::{decode, encode, FromHexError};
 use std::env;
 use std::env::VarError;

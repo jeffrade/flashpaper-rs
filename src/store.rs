@@ -21,7 +21,7 @@ pub fn save(message: Vec<u8>, static_key: &[u8]) -> Result<String, argon2::passw
 
     let message_ciphertext =
         crypto::encrypt(&aes_key, &iv, &message).expect("Could not encrypt message!");
-    let encrypted_secret = crypto::encrypt(&static_key, &iv, &message_ciphertext)
+    let encrypted_secret = crypto::encrypt(static_key, &iv, &message_ciphertext)
         .expect("Could not encrypt message_ciphertext!");
     let _ = db::store(
         &util::hex_encode(&id),
@@ -67,7 +67,7 @@ pub fn retrieve(k_str: &str, static_key: &[u8]) -> Option<String> {
                 Ok(()) => {
                     let message_ciphertext = crypto::decrypt(static_key, &iv, &secret)
                         .expect("Could not decrypt secret!");
-                    let message_vec = crypto::decrypt(&aes_key, &iv, &message_ciphertext)
+                    let message_vec = crypto::decrypt(aes_key, &iv, &message_ciphertext)
                         .expect("Could not decrypt ciphertext!");
                     match std::str::from_utf8(&message_vec) {
                         Ok(message) => {

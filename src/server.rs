@@ -13,7 +13,7 @@ pub fn start(config: Config) {
     // https://github.com/tomaka/rouille/blob/c86bbf422d1d6f7a4798c762018a4b7922bb94b5/examples/login-session.rs
     // https://github.com/tomaka/rouille/blob/c86bbf422d1d6f7a4798c762018a4b7922bb94b5/examples/simple-form.rs
     rouille::start_server("0.0.0.0:8321", move |request| {
-        rouille::log(&request, stdout(), || {
+        rouille::log(request, stdout(), || {
             router!(request,
                 (GET) (/) => {
                     if let Some(k) = request.get_param("k") {
@@ -42,7 +42,7 @@ pub fn start(config: Config) {
                     }
                 },
                 _ => {
-                    let response = rouille::match_assets(&request, "./static");
+                    let response = rouille::match_assets(request, "./static");
                     if response.is_success() {
                         response
                     } else {
